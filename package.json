@@ -14,6 +14,7 @@
     "lint": "pnpm -r --if-present lint",
     "typecheck": "pnpm -r --if-present typecheck",
     "db:up": "docker compose up -d --wait mongo",
-    "db:down": "docker compose down"
+    "db:down": "docker compose down",
+    "db:seed": "pnpm --filter api seed"
   }
 }
