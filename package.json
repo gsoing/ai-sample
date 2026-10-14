@@ -1,0 +1,19 @@
+{
+  "name": "dso-ai-sample-project",
+  "private": true,
+  "version": "0.0.0",
+  "packageManager": "pnpm@10.5.2",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "pnpm -r --parallel dev",
+    "dev:web": "pnpm --filter web dev",
+    "dev:api": "pnpm --filter api dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r --if-present lint",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "db:up": "docker compose up -d --wait mongo",
+    "db:down": "docker compose down"
+  }
+}
