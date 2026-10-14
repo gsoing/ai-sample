@@ -1,5 +1,6 @@
 import express from 'express'
 import { closeDb, connectDb, pingDb } from './db.js'
+import { quotesRouter } from './routes/quotes.js'
 
 const app = express()
 const port = Number(process.env.PORT ?? 3000)
@@ -10,6 +11,8 @@ app.get('/api/health', async (_req, res) => {
   const db = await pingDb()
   res.status(db ? 200 : 503).json({ status: db ? 'ok' : 'degraded', db })
 })
+
+app.use('/api/quotes', quotesRouter)
 
 await connectDb()
 console.log('Connected to MongoDB')

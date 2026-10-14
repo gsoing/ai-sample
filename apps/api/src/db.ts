@@ -10,6 +10,10 @@ export async function connectDb(): Promise<Db> {
   return client.db()
 }
 
+export function getDb(): Db {
+  return client.db()
+}
+
 export async function pingDb(): Promise<boolean> {
   try {
     await client.db().command({ ping: 1 })
