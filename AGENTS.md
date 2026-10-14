@@ -16,6 +16,12 @@ Example project for learning agentic development. Favor small, readable, convent
 - Quotes live in the `quotes` collection with the fields `text`, `author`, `context`, `status`, `createdAt`.
 - `status` is one of `pending`, `approved`, `rejected`. Only `approved` quotes are ever shown on `/`.
 
+## API conventions
+- Error responses are JSON: `{ "error": string }`.
+- Validation limits for a quote: `text` 1 to 280 characters, `author` 1 to 60, `context` up to 200. Strings are trimmed.
+- New quotes are always created as `pending`; the client cannot set `status`.
+- One route file per resource under `apps/api/src/routes/`, mounted in `src/index.ts`.
+
 ## Layout
 - `apps/web`: Vite + React 19 + TS (ESM). Entry `src/main.tsx`.
 - `apps/api`: Express 5 + TS (ESM). Entry `src/index.ts`, listens on `PORT` (default 3000). Routes live under `/api`.
