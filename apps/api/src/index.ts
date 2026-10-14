@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { type ErrorRequestHandler } from 'express'
 import { closeDb, connectDb, pingDb } from './db.js'
 import { quotesRouter } from './routes/quotes.js'
 
@@ -13,6 +13,12 @@ app.get('/api/health', async (_req, res) => {
 })
 
 app.use('/api/quotes', quotesRouter)
+
+const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
+  const status = typeof err.status === 'number' ? err.status : 500
+  res.status(status).json({ error: status === 400 ? 'Invalid JSON body' : 'Internal server error' })
+}
+app.use(errorHandler)
 
 await connectDb()
 console.log('Connected to MongoDB')
