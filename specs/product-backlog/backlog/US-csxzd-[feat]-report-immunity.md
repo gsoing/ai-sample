@@ -139,7 +139,7 @@ related_adrs:
 ## Architecture Decision
 
 - [ ] No ADR needed.
-- [x] ADR required → `docs/adrs/2026-10-19-1815-report-quote-data-model.md` (ADR-003), same ADR as US-zdeix. Status **Proposed**: it must be `Accepted` before this story moves to `sprint/`. ADR-004 (**Proposed**) likewise.
+- [x] ADR required → `docs/adrs/2026-10-19-1815-report-quote-data-model.md` (ADR-003), same ADR as US-zdeix. Status **Accepted**, so the gate to `sprint/` is open. ADR-004 is **Accepted** too.
 
 ---
 

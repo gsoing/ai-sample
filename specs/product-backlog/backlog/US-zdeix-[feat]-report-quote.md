@@ -143,9 +143,9 @@ related_adrs:
 ## Architecture Decision
 
 - [ ] No ADR needed.
-- [x] ADR required → `docs/adrs/2026-10-19-1815-report-quote-data-model.md` (ADR-003). Status is **Proposed**: it must be `Accepted` before this story moves to `sprint/`.
+- [x] ADR required → `docs/adrs/2026-10-19-1815-report-quote-data-model.md` (ADR-003). Status is **Accepted**, so the gate to `sprint/` is open.
 
-Also linked: ADR-002 (no authentication), ADR-001 (no test runner), ADR-004 (no structured logging, **Proposed**, must also be `Accepted` before Sprint).
+Also linked: ADR-002 (no authentication), ADR-001 (no test runner), ADR-004 (no structured logging, **Accepted**).
 
 ---
 

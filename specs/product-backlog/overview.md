@@ -20,7 +20,7 @@ Current epic: **Report a Quote**. Readers can send an approved quote back to mod
 
 **Release condition:** US-zdeix and US-csxzd ship together (PRD v1.1). US-zdeix alone lets any reader hide every approved quote.
 
-**Gate before Sprint:** ADR-003 and ADR-004 are `Proposed`. Both must be `Accepted` before either story moves to `sprint/`.
+**Gate before Sprint:** ADR-003 and ADR-004 were `Proposed` at refinement. Both are now `Accepted`, on the Product Manager's instruction (2026-10-19), so the gate is open.
 
 ## Timeline Estimates
 
@@ -39,12 +39,12 @@ Current epic: **Report a Quote**. Readers can send an approved quote back to mod
 |---|---|---|
 | DEV-CODE-BP06-R06, R01, R07 | MUST | Satisfied: `problem()`, explicit branches, global and page error boundaries |
 | DEV-CODE-BP06-R03 | MUST | Satisfied: nothing sensitive logged |
-| DEV-CODE-BP01-R01 | MUST | Satisfied by ADR-003 (once Accepted) |
+| DEV-CODE-BP01-R01 | MUST | Satisfied by ADR-003 (Accepted) |
 | DEV-CODE-BP05-R01 | MUST | Conventional Commits |
 | DEV-PLAN-BP01-R01 | MUST | AGENTS.md updated with the new fields in the same PRs |
 | DEV-CODE-BP01-R03, BP02-R03, BP05-R03 | SHOULD | Satisfied |
 | DEV-CODE-BP02-R01, R02; DEV-TEST-BP01-R01, R02 | SHOULD | **Downgraded by ADR-001** (no test runner) |
-| DEV-CODE-BP06-R02, R04, R05 | SHOULD | **Downgraded by ADR-004** (no structured logging; Proposed) |
+| DEV-CODE-BP06-R02, R04, R05 | SHOULD | **Downgraded by ADR-004** (no structured logging) |
 | DEV-SEC-BP01-R02 (identity) | n/a | **Derogated by ADR-002** |
 
 ## ADRs
@@ -53,8 +53,8 @@ Current epic: **Report a Quote**. Readers can send an approved quote back to mod
 |---|---|---|
 | ADR-001 No test runner | `docs/adrs/2026-10-19-1552-no-test-runner.md` | Accepted |
 | ADR-002 No authentication | `docs/adrs/2026-10-19-1553-no-authentication.md` | Accepted |
-| ADR-003 Report data model and abuse bound | `docs/adrs/2026-10-19-1815-report-quote-data-model.md` | **Proposed** |
-| ADR-004 No structured logging | `docs/adrs/2026-10-19-1816-no-structured-logging.md` | **Proposed** |
+| ADR-003 Report data model and abuse bound | `docs/adrs/2026-10-19-1815-report-quote-data-model.md` | Accepted |
+| ADR-004 No structured logging | `docs/adrs/2026-10-19-1816-no-structured-logging.md` | Accepted |
 
 ## Technical Architecture
 
