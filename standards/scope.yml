@@ -1,0 +1,17 @@
+# Progressive-migration scope — standards/scope.yml
+#
+# Only files matching `include` minus those matching `exclude` are checked
+# against the standards. Code outside the scope is SILENTLY IGNORED (not
+# reported as a failure), so a standard can be adopted incrementally.
+#
+# Optional file: when absent, everything is in scope. By contrast
+# standards/index.yml is mandatory.
+
+include:
+  - "apps/api/src/**/*.ts"
+
+exclude:
+  - "**/*.test.ts"
+  - "**/*.spec.ts"
+  - "**/node_modules/**"
+  - "**/dist/**"

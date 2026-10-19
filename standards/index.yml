@@ -1,0 +1,21 @@
+# Standards Registry — standards/index.yml
+#
+# Read by the standards-check / standards-impact / standards-coherence skills
+# to know which globs select which standards.
+#
+# Every `path` must EXIST: standards-impact runs an existsSync on each one and
+# reports the missing ones as `stale_standards`.
+
+version: "0.1"
+
+metadata:
+  description: "Standards-as-code registry of the Office Quotes training project"
+  maintainer: "@training-team"
+
+standards:
+  - id: "code/error-shape"
+    path: "standards/code/error-shape.md"
+    matchers:
+      - "apps/api/src/**/*.ts"
+    severity: "must"
+    description: "HTTP error responses follow RFC 9457 Problem Details (derived from DEV-CODE-BP06-R06)."
