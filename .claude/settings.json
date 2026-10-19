@@ -1,4 +1,17 @@
 {
+  "extraKnownMarketplaces": {
+    "kering-aisdlc": {
+      "source": {
+        "source": "github",
+        "repo": "kering-technologies/dso-digital_factory-ai_sdlc",
+        "ref": "aisdlc-core/v0.1.0-rc.1"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "spec-driven@kering-aisdlc": true,
+    "governance-impl@kering-aisdlc": true
+  },
   "hooks": {
     "PostToolUse": [
       {

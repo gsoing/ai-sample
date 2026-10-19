@@ -6,3 +6,8 @@ dist
 *.log
 .DS_Store
 .claude/settings.local.json
+
+# AI-SDLC: regenerated on every run, never commit
+work/
+.cache/standards-check/
+.cache/standards-impact/

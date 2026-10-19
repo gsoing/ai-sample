@@ -1,0 +1,126 @@
+# .specs-config.yaml — Kering AI-SDLC consumer-project naming conventions.
+#
+# Drop this file at your project root (alongside aidlc-docs/aidlc-state.md).
+# Adopting projects opt in by presence; if the file is absent, hub skills
+# use their built-in defaults — no behaviour change for default consumers.
+#
+# Schema reference: ai-assets/templates/specs-config/README.md
+# Decision rationale: docs/adrs/ADR-006-specs-config-home.md
+#                     docs/adrs/2026-05-10-1600-id-strategies-defaults.md
+# Source: github.com/kering-technologies/dso-shared-ressources
+# Version: v1.2 (forward-compatible — branch/commit/pr keys reserved below)
+
+# ============================================================================
+# story — consumed by spec-refinement + story-id-tracker (v1.2)
+# ============================================================================
+
+story:
+
+  # ID strategy. Three valid values:
+  #   random      → US-{5-char alphanumeric}  (DEFAULT — collision-free by construction)
+  #   sequential  → US-NNN                    (legacy — opt back in here)
+  #   timestamp   → US-{YYYYMMDDHHMM}         (rare; only useful for time-bucketed flows)
+  #
+  # Omit this key to get the default (random).
+  id_strategy: random
+
+  # Filename pattern (existing key from v1).
+  #
+  # `pattern` is a template with named slots. Two slots are always available:
+  #   {STORY_ID}    — from story-id-tracker (shape depends on id_strategy above)
+  #   {short-name}  — kebab-case slug the user provides at refine time
+  #
+  # Additional slots can be declared under `slots:` below. The skill prompts
+  # the user for each declared slot at refine time.
+  filename:
+
+    # Default (omit this whole section to use): "{STORY_ID}-{short-name}.md"
+    pattern: "{STORY_ID}-[{kind}]-{short-name}.md"
+
+    slots:
+
+      # Worked example — a kind-tag vocabulary aligned with Conventional Commits.
+      # The hub does NOT ship a default vocabulary; declare your own.
+      kind:
+
+        # Closed enumeration. The skill rejects values outside this list
+        # at refine time. Omit `vocabulary` to accept any kebab-case string.
+        vocabulary: [feat, chore, refactor, fix, docs]
+
+        # Free-text rationale the skill surfaces when prompting the user.
+        # Help them pick the right tag without re-reading CONTRIBUTING.md.
+        prompt: |
+          Pick the kind tag —
+            feat     → user-visible feature work, business value
+            chore    → infra, tooling, dependency cutovers, no behaviour change
+            refactor → local code restructure, no behaviour change
+            fix      → story-tracked bug (not an out-of-band hotfix)
+            docs     → doc-only story (rare — most fold into chore/feat)
+
+
+# ============================================================================
+# adr — consumed by spec-adr (v1.2)
+# ============================================================================
+
+adr:
+
+  # ID strategy. Three valid values:
+  #   timestamp   → {YYYY-MM-DD-HHMM}-{slug}.md   (DEFAULT — drops ADR- prefix; chronological sort)
+  #   sequential  → ADR-NNN-{slug}.md             (legacy — opt back in here)
+  #   random      → ADR-{5-char}-{slug}.md        (rare; collision-free but loses chronology)
+  #
+  # Omit this key to get the default (timestamp).
+  id_strategy: timestamp
+
+
+# ============================================================================
+# prd — consumed by spec-brainstorming (v1.2)
+# ============================================================================
+
+prd:
+
+  # ID strategy. Two valid values:
+  #   timestamp   → {YYYY-MM-DD-HHMM}-{slug}-prd.md   (DEFAULT — supports multiple per day)
+  #   date-only   → {YYYY-MM-DD}-{slug}-prd.md        (legacy — assumes ≤ 1 PRD per day)
+  #
+  # Random does not apply to PRDs (chronological sort is load-bearing).
+  # Omit this key to get the default (timestamp).
+  id_strategy: timestamp
+
+
+# ============================================================================
+# story-map — consumed by spec-brainstorming (v1.2)
+# ============================================================================
+
+story-map:
+
+  # ID strategy. Two valid values:
+  #   timestamp   → {YYYY-MM-DD-HHMM}-{slug}-story-map.md   (DEFAULT)
+  #   date-only   → {YYYY-MM-DD}-{slug}-story-map.md        (legacy)
+  #
+  # Random does not apply to story-maps. Omit this key to get the default (timestamp).
+  id_strategy: timestamp
+
+
+# ============================================================================
+# RESERVED FOR v2 — not consumed by current skills.
+#
+# Future skills (spec-implementation, impl-dev-agent) will consume these
+# when branch / commit / PR title derivation needs to follow the same
+# discovery surface. v1.x parses-and-ignores these keys, so adopters can
+# pre-author them without breaking anything.
+#
+# Defaults if absent (today's behaviour):
+#   branch.pattern  : "feature/{STORY_ID}-{short-name}"
+#   commit.footer   : "Closes {STORY_ID}"
+#   pr.title        : "{STORY_ID}: {title}"
+# ============================================================================
+
+# branch:
+#   pattern: "feature/{STORY_ID}-{short-name}"
+#
+# commit:
+#   footer: "Closes {STORY_ID}"
+#
+# pr:
+#   title: "{STORY_ID}: {title}"
