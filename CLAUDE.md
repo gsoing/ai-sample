@@ -47,7 +47,7 @@ The validator `check_adr.sh` shipped in `aisdlc-core/v0.1.0-rc.1` rejects ADR ti
 Until that fix is released and the `.claude/aisdlc-framework` submodule is bumped:
 
 - Keep the timestamped file name, for example `docs/adrs/2026-10-19-1717-error-response-shape.md`.
-- Write the level-1 title as `# ADR-NNN: <title>`, taking the next number after the highest one in `docs/adrs/` (currently `ADR-003`).
+- Write the level-1 title as `# ADR-NNN: <title>`, taking the next number after the highest one already used in the titles of `docs/adrs/` (list them with `grep -h '^# ADR-' docs/adrs/*.md`).
 - Check it with `bash .claude/aisdlc-framework/plugins/spec-driven/skills/spec-validation/checks/check_adr.sh <file>`.
 
 After the fix, the `ADR-NNN: ` prefix can be dropped and this section removed.
