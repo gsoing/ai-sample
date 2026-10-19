@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { nextInCycle, type CycleState } from '../lib/cycle.ts'
 import { REPORT_REASON_LABELS, type ReportReason } from '../lib/report.ts'
+import { loadReportedIds, rememberReportedId } from '../lib/reported.ts'
 
 interface Quote {
   id: string
@@ -19,6 +20,7 @@ export default function DisplayPage() {
   const [sending, setSending] = useState(false)
   const [reportMessage, setReportMessage] = useState('')
   const [reportError, setReportError] = useState('')
+  const [reportedIds, setReportedIds] = useState<string[]>(loadReportedIds)
 
   useEffect(() => {
     fetch('/api/quotes')
@@ -72,6 +74,8 @@ export default function DisplayPage() {
         return
       }
       closeReport()
+      rememberReportedId(id)
+      setReportedIds((ids) => [...ids, id])
       removeFromRotation(id)
       setReportMessage('Thank you. The quote has been sent back to moderation.')
     } catch {
@@ -97,7 +101,7 @@ export default function DisplayPage() {
             <button type="button" disabled={sending} onClick={showNext}>
               Next quote
             </button>
-            {!reporting && (
+            {!reporting && !reportedIds.includes(current.id) && (
               <button
                 type="button"
                 className="secondary"
