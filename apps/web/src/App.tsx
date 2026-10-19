@@ -1,5 +1,6 @@
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router'
 import DisplayPage from './pages/DisplayPage.tsx'
+import ModeratePage from './pages/ModeratePage.tsx'
 import SubmitPage from './pages/SubmitPage.tsx'
 
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<DisplayPage />} />
           <Route path="/submit" element={<SubmitPage />} />
+          <Route path="/moderate" element={<ModeratePage />} />
         </Routes>
       </main>
     </BrowserRouter>
