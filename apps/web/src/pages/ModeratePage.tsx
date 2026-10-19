@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
+import { REPORT_REASON_LABELS, type QuoteReport } from '../lib/report.ts'
 
 interface PendingQuote {
   id: string
   text: string
   author: string
   context?: string
+  report?: QuoteReport
 }
 
 type Action = 'approve' | 'reject'
@@ -62,6 +64,11 @@ export default function ModeratePage() {
         <ul className="moderation-list">
           {quotes.map((quote) => (
             <li key={quote.id}>
+              {quote.report && (
+                <p className="reported-badge">
+                  Reported: {REPORT_REASON_LABELS[quote.report.reason] ?? 'Unknown reason'}
+                </p>
+              )}
               <blockquote>{quote.text}</blockquote>
               <p className="quote-author">{quote.author}</p>
               {quote.context && <p className="quote-context">{quote.context}</p>}
