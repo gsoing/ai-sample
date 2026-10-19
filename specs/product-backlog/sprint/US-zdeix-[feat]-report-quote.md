@@ -4,7 +4,7 @@ jira_key: ""
 title: "Report a quote back to moderation"
 epic: "Report a Quote"
 priority: High
-status: Backlog
+status: Sprint
 story_points: 5
 
 maturity_tier: Foundation

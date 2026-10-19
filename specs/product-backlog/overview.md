@@ -14,7 +14,7 @@ Current epic: **Report a Quote**. Readers can send an approved quote back to mod
 
 | Phase | Status | Story IDs | Story Points | Maturity Tier |
 |-------|--------|-----------|--------------|---------------|
-| Report a Quote — report loop | Backlog | US-zdeix | 5 | Foundation |
+| Report a Quote — report loop | Sprint | US-zdeix | 5 | Foundation |
 | Report a Quote — abuse guard | Backlog | US-csxzd | 3 | Foundation |
 | **Total** | | **2 stories** | **8** | |
 
