@@ -75,7 +75,7 @@ export default function DisplayPage() {
       }
       closeReport()
       rememberReportedId(id)
-      setReportedIds((ids) => [...ids, id])
+      setReportedIds((ids) => (ids.includes(id) ? ids : [...ids, id]))
       removeFromRotation(id)
       setReportMessage('Thank you. The quote has been sent back to moderation.')
     } catch {

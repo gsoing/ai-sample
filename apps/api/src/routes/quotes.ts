@@ -1,5 +1,5 @@
 import { Router, type Response } from 'express'
-import { ObjectId } from 'mongodb'
+import { ObjectId, type UpdateFilter } from 'mongodb'
 import { getDb } from '../db.js'
 import { problem } from '../problem.js'
 import type { Quote, QuoteStatus } from '../types.js'
@@ -86,7 +86,8 @@ async function moderate(id: string, status: QuoteStatus, res: Response) {
   const _id = new ObjectId(id)
   const quotes = getDb().collection<Quote>('quotes')
 
-  const update = status === 'approved' ? APPROVE_PIPELINE : { $set: { status } }
+  const reject: UpdateFilter<Quote> = { $set: { status } }
+  const update = status === 'approved' ? APPROVE_PIPELINE : reject
   const { matchedCount } = await quotes.updateOne({ _id, status: 'pending' }, update)
   if (matchedCount === 1) {
     res.json({ id, status })
