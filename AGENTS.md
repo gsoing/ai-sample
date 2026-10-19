@@ -15,6 +15,7 @@ Example project for learning agentic development. Favor small, readable, convent
 - The app has 3 pages: `/` (display), `/submit`, `/moderate`. `/moderate` is not linked in the navigation. There is no authentication, by design.
 - Quotes live in the `quotes` collection with the fields `text`, `author`, `context`, `status`, `createdAt`.
 - `status` is one of `pending`, `approved`, `rejected`. Only `approved` quotes are ever shown on `/`.
+- A reader can report an approved quote (`POST /api/quotes/:id/report`, `reason` one of `offensive`, `inaccurate`, `private-info`, `other`). The quote goes back to `pending` and gets an optional `report` field (`{ reason, reportedAt }`), returned only by `GET /api/quotes/pending`. Approving removes `report`. See ADR-003 (`docs/adrs/2026-10-19-1815-report-quote-data-model.md`).
 
 ## API conventions
 - Error responses are RFC 9457 Problem Details served as `application/problem+json`: `{ type, title, status, detail }` (standard `code/error-shape`, rule `DEV-CODE-BP06-R06`). Build them with `problem()` from `apps/api/src/problem.ts`, never by hand. Each kind of error has one stable `type` (`/errors/<kind>`) and one `title`; add new kinds in that file.
