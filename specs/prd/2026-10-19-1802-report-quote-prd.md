@@ -4,7 +4,7 @@
 
 **Author:** Office Quotes team (brainstorming session)
 
-**Status:** In Review
+**Status:** Approved
 
 **Version:** 1.0
 
@@ -54,7 +54,7 @@ This is a training project with no analytics, so success is checked by hand.
 
 | Metric | Target | How checked |
 |---|---|---|
-| Time from report to hidden on `/` | Next page load | Manual: report, reload `/` |
+| Time from report to hidden on `/` | Immediately for the reporter (the quote leaves the local rotation); for other readers, at their next page load | Manual: report, then reload `/` in another tab |
 | Clicks for a reader to report | 2 (Report, then confirm a reason) | Manual walk-through |
 | Moderator can tell a reported quote from a new submission | 100% of reported quotes show the marker and reason | Manual check on `/moderate` |
 | A re-approved reported quote can't be hidden again | 409 on every further report | `curl` |
@@ -232,7 +232,7 @@ No migration is needed. Existing documents have neither field and behave as "nev
 | Milestone | Content | Estimate |
 |---|---|---|
 | M1 | A reader reports a quote end to end; moderator sees it marked (US-zdeix) | 5 points |
-| M2 | Abuse guard: a re-approved quote can't be reported again (US-csxzd) | 3 points |
+| M2 | Abuse guard: a re-approved quote can't be reported again (US-csxzd). **Ships together with M1**: the report loop alone is a "hide everything" button | 3 points |
 
 Total: 8 points, roughly 2 to 3 days of work for one developer.
 
@@ -253,7 +253,7 @@ Total: 8 points, roughly 2 to 3 days of work for one developer.
 
 | Role | Name | Status |
 |---|---|---|
-| Product Manager | _to be filled in_ | Pending |
+| Product Manager | Guillaume Soing | Approved 2026-10-19 (immunity kept, ships with the report loop) |
 | Dev Reviewer | _to be filled in_ | Pending |
 
 ---
@@ -263,3 +263,4 @@ Total: 8 points, roughly 2 to 3 days of work for one developer.
 | Version | Date | Author | Changes |
 |---|---|---|---|
 | 1.0 | 2026-10-19 | Brainstorming session | Initial draft |
+| 1.1 | 2026-10-19 | Product Manager review | Re-approval immunity kept and made a release condition; success metric on hiding clarified (immediate for the reporter, next load for others) |

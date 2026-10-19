@@ -10,7 +10,9 @@
 
 ## Overview
 
-One epic and two stories, 8 points in total. Each story is a releasable increment that works end to end (API, web, data) and can be checked by hand (`curl` and the browser, ADR-001).
+One epic and two stories, 8 points in total. Each story works end to end (API, web, data) and can be checked by hand (`curl` and the browser, ADR-001).
+
+**Release condition: US-zdeix and US-csxzd ship together.** US-zdeix on its own is a "hide everything" button: any reader can send every approved quote back to moderation. The one-shot guard that bounds this comes with US-csxzd. The two stories are separate so they can be built and reviewed one at a time, not so they can be released apart.
 
 Story IDs come from `story-id-tracker` (`random` strategy, see `.specs-config.yaml`).
 
@@ -42,20 +44,20 @@ Story IDs come from `story-id-tracker` (`random` strategy, see `.specs-config.ya
   - `GET /api/quotes/pending` returns `report` when present; `GET /api/quotes` shape unchanged;
   - Report button, reason picker, confirmation and errors on `DisplayPage`, and the reported quote dropped from the rotation;
   - **Reported** badge and reason on `ModeratePage`;
-  - Approve on a reported quote removes `report`;
+  - Approve on a reported quote removes `report` (the immunity flag comes with US-csxzd);
   - AGENTS.md: document the new optional field.
-- **Releasable:** yes. The full report loop works, and the existing moderation flow handles the outcome.
+- **Releasable:** not alone. The report loop works end to end, but without US-csxzd a reader can hide every approved quote. Merge it only together with US-csxzd.
 - **Refinement notes:** raise an ADR for the data model change and the residual abuse risk (anonymous reports, no rate limiting). Rules to check: `DEV-CODE-BP06-R06` (error shape), `DEV-CODE-BP01-R03` (ADR security section).
 
 ### US-csxzd: A re-approved quote can't be reported again (3 points)
 
 - **Delivers:** once a moderator re-approves a reported quote, it stays on `/`. Further reports get 409 and the UI says why.
 - **Includes:**
-  - Approve on a reported quote sets `reportClearedAt`;
+  - Approve on a reported quote removes `report` and sets `reportClearedAt`, in one update (a pipeline update, so a plain pending quote gets no `reportClearedAt`);
   - the report endpoint refuses quotes with `reportClearedAt`, returning 409 `quote-not-reportable` with its own `detail`;
   - display page: the public API doesn't say which quotes are cleared (FR-5), so the button stays visible and a 409 shows its `detail` message. A `localStorage` "already reported by me" flag (best effort) hides the button on quotes this browser has already reported;
   - AGENTS.md: document `reportClearedAt`.
-- **Releasable:** yes. It hardens US-zdeix against mass reporting.
+- **Releasable:** together with US-zdeix. It is the guard that makes the report loop safe to ship.
 
 ---
 
@@ -74,7 +76,8 @@ US-csxzd (re-approval immunity + client-side "already reported" flag)
 
 ### Phase 1: Report loop — 5 points
 - US-zdeix
-- **Success criteria:** report from `/`, gone on reload, visible with its reason on `/moderate`; approve or reject works; `GET /api/quotes` shape is identical before and after.
+- **Success criteria:** report from `/`, the quote leaves the reporter's rotation at once and is gone for others on their next load, visible with its reason on `/moderate`; approve or reject works; `GET /api/quotes` shape is identical before and after.
+- **Refinement note:** US-zdeix's Approve behaviour must already clear `report`; US-csxzd adds `reportClearedAt` and the 409. State this split explicitly in the acceptance criteria.
 
 ### Phase 2: Abuse guard — 3 points
 - US-csxzd
@@ -93,7 +96,7 @@ US-csxzd (re-approval immunity + client-side "already reported" flag)
 | Risk | Story | Mitigation |
 |---|---|---|
 | Data model change (two optional fields) | US-zdeix, US-csxzd | ADR at refinement; AGENTS.md updated in the same story |
-| Anonymous mass reporting | US-csxzd | One-shot hide per quote; residual risk recorded in an ADR |
+| Anonymous mass reporting | US-csxzd | One-shot hide per quote; the two stories ship together; residual risk recorded in an ADR |
 | Change to the shared `moderate()` helper breaks normal approvals | US-zdeix | Manual regression check: approve or reject a plain pending quote |
 
 ---
