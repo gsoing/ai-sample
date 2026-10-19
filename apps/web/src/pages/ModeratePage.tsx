@@ -32,8 +32,8 @@ export default function ModeratePage() {
     try {
       const response = await fetch(`/api/quotes/${id}/${action}`, { method: 'PATCH' })
       if (!response.ok) {
-        const body = (await response.json()) as { error?: string }
-        setError(body.error ?? `Could not ${action} the quote`)
+        const body = (await response.json()) as { detail?: string }
+        setError(body.detail ?? `Could not ${action} the quote`)
       }
     } catch {
       setError('Could not reach the server')

@@ -21,8 +21,8 @@ export default function SubmitPage() {
         body: JSON.stringify({ text, author, context }),
       })
       if (!response.ok) {
-        const body = (await response.json()) as { error?: string }
-        setError(body.error ?? 'Could not send the quote')
+        const body = (await response.json()) as { detail?: string }
+        setError(body.detail ?? 'Could not send the quote')
         return
       }
       setText('')

@@ -1,6 +1,7 @@
 import { Router, type Response } from 'express'
 import { ObjectId } from 'mongodb'
 import { getDb } from '../db.js'
+import { problem } from '../problem.js'
 import type { Quote, QuoteStatus } from '../types.js'
 import { validateNewQuote } from '../validation.js'
 
@@ -25,7 +26,7 @@ quotesRouter.get('/', async (_req, res) => {
 quotesRouter.post('/', async (req, res) => {
   const result = validateNewQuote(req.body)
   if (!result.ok) {
-    res.status(400).json({ error: result.error })
+    problem(res, 'invalid-quote', result.error)
     return
   }
 
@@ -61,7 +62,7 @@ quotesRouter.get('/pending', async (_req, res) => {
 // A moderation action is only valid on a pending quote.
 async function moderate(id: string, status: QuoteStatus, res: Response) {
   if (!/^[0-9a-f]{24}$/i.test(id)) {
-    res.status(400).json({ error: 'Invalid quote id' })
+    problem(res, 'invalid-quote-id', 'Quote id must be a 24-character hex string')
     return
   }
   const _id = new ObjectId(id)
@@ -75,10 +76,10 @@ async function moderate(id: string, status: QuoteStatus, res: Response) {
 
   const existing = await quotes.findOne({ _id })
   if (!existing) {
-    res.status(404).json({ error: 'Quote not found' })
+    problem(res, 'quote-not-found', `No quote with id ${id}`)
     return
   }
-  res.status(409).json({ error: `Quote is already ${existing.status}` })
+  problem(res, 'quote-already-moderated', `Quote is already ${existing.status}`)
 }
 
 quotesRouter.patch('/:id/approve', (req, res) => moderate(req.params.id, 'approved', res))

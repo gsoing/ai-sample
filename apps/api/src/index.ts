@@ -1,5 +1,6 @@
 import express, { type ErrorRequestHandler } from 'express'
 import { closeDb, connectDb, pingDb } from './db.js'
+import { problem } from './problem.js'
 import { quotesRouter } from './routes/quotes.js'
 
 const app = express()
@@ -14,9 +15,21 @@ app.get('/api/health', async (_req, res) => {
 
 app.use('/api/quotes', quotesRouter)
 
-const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
-  const status = typeof err.status === 'number' ? err.status : 500
-  res.status(status).json({ error: status === 400 ? 'Invalid JSON body' : 'Internal server error' })
+app.use('/api', (req, res) => {
+  problem(res, 'not-found', `No route ${req.method} ${req.originalUrl}`)
+})
+
+const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
+  if (err.type === 'entity.parse.failed') {
+    problem(res, 'invalid-json-body', 'Request body is not valid JSON')
+    return
+  }
+  if (err.type === 'entity.too.large') {
+    problem(res, 'payload-too-large', 'Request body is too large')
+    return
+  }
+  console.error(`${req.method} ${req.originalUrl}`, err)
+  problem(res, 'internal', 'The server could not process the request')
 }
 app.use(errorHandler)
 
