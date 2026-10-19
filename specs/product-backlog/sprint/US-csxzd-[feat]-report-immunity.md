@@ -4,7 +4,7 @@ jira_key: ""
 title: "A re-approved quote can't be reported again"
 epic: "Report a Quote"
 priority: High
-status: Backlog
+status: Sprint
 story_points: 3
 
 maturity_tier: Foundation
