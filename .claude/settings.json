@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "(pnpm lint && pnpm typecheck) >&2 || exit 2"
+          }
+        ]
+      }
+    ]
+  }
+}
