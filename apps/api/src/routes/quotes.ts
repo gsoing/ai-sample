@@ -3,7 +3,7 @@ import { ObjectId } from 'mongodb'
 import { getDb } from '../db.js'
 import { problem } from '../problem.js'
 import type { Quote, QuoteStatus } from '../types.js'
-import { validateNewQuote } from '../validation.js'
+import { validateNewQuote, validateReport } from '../validation.js'
 
 export const quotesRouter = Router()
 
@@ -59,9 +59,11 @@ quotesRouter.get('/pending', async (_req, res) => {
   )
 })
 
+const ID_PATTERN = /^[0-9a-f]{24}$/i
+
 // A moderation action is only valid on a pending quote.
 async function moderate(id: string, status: QuoteStatus, res: Response) {
-  if (!/^[0-9a-f]{24}$/i.test(id)) {
+  if (!ID_PATTERN.test(id)) {
     problem(res, 'invalid-quote-id', 'Quote id must be a 24-character hex string')
     return
   }
@@ -85,3 +87,40 @@ async function moderate(id: string, status: QuoteStatus, res: Response) {
 quotesRouter.patch('/:id/approve', (req, res) => moderate(req.params.id, 'approved', res))
 
 quotesRouter.patch('/:id/reject', (req, res) => moderate(req.params.id, 'rejected', res))
+
+// A report sends an approved quote back to moderation. The status check and
+// the write are one conditional update, so concurrent calls can't both win.
+quotesRouter.post('/:id/report', async (req, res) => {
+  const { id } = req.params
+  if (!ID_PATTERN.test(id)) {
+    problem(res, 'invalid-quote-id', 'Quote id must be a 24-character hex string')
+    return
+  }
+  const result = validateReport(req.body)
+  if (!result.ok) {
+    problem(res, 'invalid-report', result.error)
+    return
+  }
+  const _id = new ObjectId(id)
+  const quotes = getDb().collection<Quote>('quotes')
+
+  const { matchedCount } = await quotes.updateOne(
+    { _id, status: 'approved' },
+    { $set: { status: 'pending', report: { reason: result.value, reportedAt: new Date() } } },
+  )
+  if (matchedCount === 1) {
+    res.json({ id, status: 'pending' })
+    return
+  }
+
+  const existing = await quotes.findOne({ _id })
+  if (!existing) {
+    problem(res, 'quote-not-found', `No quote with id ${id}`)
+    return
+  }
+  problem(
+    res,
+    'quote-not-reportable',
+    `Quote is ${existing.status}, only approved quotes can be reported`,
+  )
+})
