@@ -32,6 +32,9 @@ dso_rules:
   - id: DEV-CODE-BP05-R01
     severity: MUST
     note: "Conventional Commits, one commit per AC, footer Closes US-zdeix"
+  - id: DEV-PLAN-BP01-R01
+    severity: MUST
+    note: "AGENTS.md is updated in the same PR to document the `report` field"
   - id: DEV-CODE-BP02-R01
     severity: SHOULD
     note: "Downgraded by ADR-001: no test runner, so no coverage figure; ACs are verified by hand"
@@ -125,6 +128,7 @@ related_adrs:
 | DEV-CODE-BP06-R03 | MUST | Nothing is logged by the new route. |
 | DEV-CODE-BP01-R01 | MUST | ADR-003 records the schema change and the abuse trade-off. |
 | DEV-CODE-BP05-R01 | MUST | Conventional Commits, one per AC. |
+| DEV-PLAN-BP01-R01 | MUST | AGENTS.md updated in the same PR (`report`). |
 | DEV-CODE-BP02-R01 / R02 | SHOULD (ADR-001) | No runner; `pnpm lint`, `pnpm typecheck`, `pnpm build` pass; manual verification. |
 | DEV-TEST-BP01-R01 / R02 | SHOULD (ADR-001) | `curl` and browser checks listed per AC. |
 | DEV-CODE-BP06-R02 / R04 / R05 | SHOULD (ADR-004) | Not satisfied project-wide; nothing added here. |
@@ -364,7 +368,7 @@ Add a report action next to the existing moderation actions in the quotes router
 - [ ] Coverage: not measured, per ADR-001 (DEV-CODE-BP02-R01 SHOULD)
 - [ ] Every new error goes through `problem()`; `standards-check` on the diff is green for `code/error-shape` (DEV-CODE-BP06-R06)
 - [ ] `GET /api/quotes` response shape unchanged (FR-5)
-- [ ] AGENTS.md documents the `report` field
+- [ ] AGENTS.md documents the `report` field (DEV-PLAN-BP01-R01)
 - [ ] No sensitive data logged; no new log line (DEV-CODE-BP06-R03)
 - [ ] All commits follow Conventional Commits with `Closes US-zdeix` (DEV-CODE-BP05-R01)
 - [ ] No secrets committed, no new dependency

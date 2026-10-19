@@ -30,7 +30,7 @@ Current epic: **Report a Quote**. Readers can send an approved quote back to mod
 ## Maturity-Tier Mix
 
 - Both stories: **Foundation**, with honest downgrades.
-- Foundation guidelines exercised: `DEV-CODE-BP01`, `DEV-CODE-BP02`, `DEV-CODE-BP05`, `DEV-CODE-BP06`, `DEV-TEST-BP01`.
+- Foundation guidelines exercised: `DEV-CODE-BP01`, `DEV-CODE-BP02`, `DEV-CODE-BP05`, `DEV-CODE-BP06`, `DEV-TEST-BP01`, `DEV-PLAN-BP01`.
 - Growth / Excellence guidelines touched but not adopted (`dso-foundation` only): `DEV-PLAN-BP03` (no OpenAPI), `DEV-SEC-BP01` (identity, derogated by ADR-002).
 
 ## DSO Coverage
@@ -41,6 +41,7 @@ Current epic: **Report a Quote**. Readers can send an approved quote back to mod
 | DEV-CODE-BP06-R03 | MUST | Satisfied: nothing sensitive logged |
 | DEV-CODE-BP01-R01 | MUST | Satisfied by ADR-003 (once Accepted) |
 | DEV-CODE-BP05-R01 | MUST | Conventional Commits |
+| DEV-PLAN-BP01-R01 | MUST | AGENTS.md updated with the new fields in the same PRs |
 | DEV-CODE-BP01-R03, BP02-R03, BP05-R03 | SHOULD | Satisfied |
 | DEV-CODE-BP02-R01, R02; DEV-TEST-BP01-R01, R02 | SHOULD | **Downgraded by ADR-001** (no test runner) |
 | DEV-CODE-BP06-R02, R04, R05 | SHOULD | **Downgraded by ADR-004** (no structured logging; Proposed) |

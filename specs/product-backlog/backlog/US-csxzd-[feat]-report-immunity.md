@@ -32,6 +32,9 @@ dso_rules:
   - id: DEV-CODE-BP05-R01
     severity: MUST
     note: "Conventional Commits, one commit per AC, footer Closes US-csxzd"
+  - id: DEV-PLAN-BP01-R01
+    severity: MUST
+    note: "AGENTS.md is updated in the same PR to document the `reportClearedAt` field"
   - id: DEV-CODE-BP02-R01
     severity: SHOULD
     note: "Downgraded by ADR-001: no coverage measured"
@@ -121,6 +124,7 @@ related_adrs:
 | DEV-CODE-BP06-R03 | MUST | No logging added; nothing about the reader goes to the server. |
 | DEV-CODE-BP01-R01 | MUST | Implements the immunity decided in ADR-003. |
 | DEV-CODE-BP05-R01 | MUST | Conventional Commits. |
+| DEV-PLAN-BP01-R01 | MUST | AGENTS.md updated in the same PR (`reportClearedAt`). |
 | DEV-CODE-BP02-R01 / R02 | SHOULD (ADR-001) | Manual verification; lint, typecheck, build. |
 | DEV-TEST-BP01-R01 / R02 | SHOULD (ADR-001) | `curl` and browser checks per AC. |
 | DEV-CODE-BP06-R02 / R04 / R05 | SHOULD (ADR-004) | Not satisfied project-wide. |
@@ -320,7 +324,7 @@ Tighten the two paths that US-zdeix introduced. The approve path becomes a singl
 - [ ] Coverage: not measured, per ADR-001
 - [ ] `standards-check` green for `code/error-shape` (DEV-CODE-BP06-R06)
 - [ ] `GET /api/quotes` shape unchanged; `reportClearedAt` never exposed
-- [ ] AGENTS.md documents `reportClearedAt`
+- [ ] AGENTS.md documents `reportClearedAt` (DEV-PLAN-BP01-R01)
 - [ ] No sensitive data logged (DEV-CODE-BP06-R03)
 - [ ] Conventional Commits with `Closes US-csxzd` (DEV-CODE-BP05-R01)
 - [ ] No secrets, no new dependency
