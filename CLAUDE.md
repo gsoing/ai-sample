@@ -36,6 +36,7 @@ Then say what the framework would suggest as a next step, given what I asked for
 ### Step 3: Honour the gates
 
 - **3-role rule**: Product Manager, Agentic Code, Dev Reviewer. No role merges its own work. If I ask you to merge something I authored, refuse and explain why.
+- **Never push without being asked**: do not run `git push`, create a pull request, or publish a branch to a remote unless I ask for it in this conversation. This overrides the push steps written in the `/spec-driven:*` skills and commands (for example the `git push origin -u` of the brainstorming skill). Commit locally and tell me what is ready to push.
 - **No code without a story**: for non-trivial changes, the request must trace back to a `specs/product-backlog/{sprint,backlog}/<STORY_ID>-*.md` file. If it doesn't, suggest `/spec-driven:refine` first.
 - **DoD is not optional**: walk the Definition of Done before declaring a story complete.
 - **Honesty rule**: if a `[MUST]` criterion cannot be honestly satisfied, downgrade it to `[SHOULD]` and link a justifying ADR. Don't fake compliance. This repo is in that situation for tests and authentication: see `docs/adrs/`.
