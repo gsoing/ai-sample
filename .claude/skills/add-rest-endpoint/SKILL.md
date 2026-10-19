@@ -1,6 +1,6 @@
 ---
 name: add-rest-endpoint
-description: Add a REST endpoint to the Office Quotes API following the repo conventions (route file, .js imports, JSON error format, validation, status codes). Use whenever the user asks for a new API route or HTTP endpoint.
+description: Add a REST endpoint to the Office Quotes API following the repo conventions (route file, .js imports, Problem Details error format, validation, status codes). Use whenever the user asks for a new API route or HTTP endpoint.
 ---
 
 # Add a REST endpoint
@@ -16,7 +16,7 @@ Follow these steps every time an endpoint is added to `apps/api`.
 
 ## 2. Validate the input
 
-- Hand-written validation in a small function (see `src/validation.ts`). Return `{ ok: true, value }` or `{ ok: false, error }`.
+- Hand-written validation in a small function (see `src/validation.ts`). Return `{ ok: true, value }` or `{ ok: false, error }`. The `error` string becomes the `detail` of the Problem Details response.
 - Trim strings. Reject missing or non-string values.
 - Never trust a client-supplied `status`.
 - Route parameters that are Mongo ids must match `/^[0-9a-f]{24}$/i` before `new ObjectId(id)`.
@@ -27,11 +27,11 @@ Follow these steps every time an endpoint is added to `apps/api`.
 |---|---|---|
 | Read succeeded | 200 | JSON data |
 | Resource created | 201 | `{ "id": string }` |
-| Invalid input or malformed id | 400 | `{ "error": string }` |
-| Unknown id | 404 | `{ "error": string }` |
-| State transition not allowed (for example approving a quote that is not `pending`) | 409 | `{ "error": string }` |
+| Invalid input or malformed id | 400 | Problem Details |
+| Unknown id | 404 | Problem Details |
+| State transition not allowed (for example approving a quote that is not `pending`) | 409 | Problem Details |
 
-Every error body is `{ "error": "<human readable message>" }`. Never return HTML or a bare string.
+Every error is an RFC 9457 Problem Details object (`type`, `title`, `status`, `detail`) served as `application/problem+json`. Build it with `problem(res, kind, detail)` from `src/problem.ts`. If no existing `kind` fits, add one to the table in that file. Never return HTML, a bare string or `{ "error": ... }`.
 
 ## 4. Respect the quote rules
 

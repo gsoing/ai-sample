@@ -17,7 +17,9 @@ Example project for learning agentic development. Favor small, readable, convent
 - `status` is one of `pending`, `approved`, `rejected`. Only `approved` quotes are ever shown on `/`.
 
 ## API conventions
-- Error responses are JSON: `{ "error": string }`.
+- Error responses are RFC 9457 Problem Details served as `application/problem+json`: `{ type, title, status, detail }` (standard `code/error-shape`, rule `DEV-CODE-BP06-R06`). Build them with `problem()` from `apps/api/src/problem.ts`, never by hand. Each kind of error has one stable `type` (`/errors/<kind>`) and one `title`; add new kinds in that file.
+- `GET /api/health` is not an error response: it keeps its monitoring body `{ status, db }`, including on 503.
+- The frontend reads the error message from `detail`.
 - Validation limits for a quote: `text` 1 to 280 characters, `author` 1 to 60, `context` up to 200. Strings are trimmed.
 - New quotes are always created as `pending`; the client cannot set `status`.
 - One route file per resource under `apps/api/src/routes/`, mounted in `src/index.ts`.
