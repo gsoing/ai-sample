@@ -1,5 +1,5 @@
 import { Router, type Response } from 'express'
-import { ObjectId } from 'mongodb'
+import { ObjectId, type UpdateFilter } from 'mongodb'
 import { getDb } from '../db.js'
 import { problem } from '../problem.js'
 import type { Quote, QuoteStatus } from '../types.js'
@@ -55,6 +55,7 @@ quotesRouter.get('/pending', async (_req, res) => {
       author: quote.author,
       context: quote.context,
       createdAt: quote.createdAt,
+      ...(quote.report && { report: quote.report }),
     })),
   )
 })
@@ -62,6 +63,7 @@ quotesRouter.get('/pending', async (_req, res) => {
 const ID_PATTERN = /^[0-9a-f]{24}$/i
 
 // A moderation action is only valid on a pending quote.
+// Approving also clears a report: the moderator has reviewed it.
 async function moderate(id: string, status: QuoteStatus, res: Response) {
   if (!ID_PATTERN.test(id)) {
     problem(res, 'invalid-quote-id', 'Quote id must be a 24-character hex string')
@@ -70,7 +72,9 @@ async function moderate(id: string, status: QuoteStatus, res: Response) {
   const _id = new ObjectId(id)
   const quotes = getDb().collection<Quote>('quotes')
 
-  const { matchedCount } = await quotes.updateOne({ _id, status: 'pending' }, { $set: { status } })
+  const update: UpdateFilter<Quote> =
+    status === 'approved' ? { $set: { status }, $unset: { report: '' } } : { $set: { status } }
+  const { matchedCount } = await quotes.updateOne({ _id, status: 'pending' }, update)
   if (matchedCount === 1) {
     res.json({ id, status })
     return
