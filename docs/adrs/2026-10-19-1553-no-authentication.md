@@ -1,4 +1,10 @@
-# No authentication: bounded derogation for the training context
+# ADR-002: No authentication: bounded derogation for the training context
+
+<!-- Title format: "# ADR-NNN:" is what check_adr.sh in aisdlc-core/v0.1.0-rc.1 requires.
+     That script wrongly rejects the default `timestamp` id_strategy (titles without a number):
+     see kering-technologies/dso-shared-ressources PR #91. Once the fix is released and the
+     submodule is bumped, the "ADR-NNN: " prefix is no longer needed and can be dropped.
+     The file name keeps its timestamp; the number is only for the validator. -->
 
 ## Status
 

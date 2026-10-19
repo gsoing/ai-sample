@@ -40,6 +40,18 @@ Then say what the framework would suggest as a next step, given what I asked for
 - **DoD is not optional**: walk the Definition of Done before declaring a story complete.
 - **Honesty rule**: if a `[MUST]` criterion cannot be honestly satisfied, downgrade it to `[SHOULD]` and link a justifying ADR. Don't fake compliance. This repo is in that situation for tests and authentication: see `docs/adrs/`.
 
+## ADR titles (temporary workaround)
+
+The validator `check_adr.sh` shipped in `aisdlc-core/v0.1.0-rc.1` rejects ADR titles without a number, which is what the default `timestamp` id strategy produces (kering-technologies/dso-shared-ressources PR #91).
+
+Until that fix is released and the `.claude/aisdlc-framework` submodule is bumped:
+
+- Keep the timestamped file name, for example `docs/adrs/2026-10-19-1717-error-response-shape.md`.
+- Write the level-1 title as `# ADR-NNN: <title>`, taking the next number after the highest one in `docs/adrs/` (currently `ADR-003`).
+- Check it with `bash .claude/aisdlc-framework/plugins/spec-driven/skills/spec-validation/checks/check_adr.sh <file>`.
+
+After the fix, the `ADR-NNN: ` prefix can be dropped and this section removed.
+
 ## Standards
 
 `standards/` holds the project's standards-as-code (`standards/index.yml` is the registry). Before changing code under `apps/api/src/`, read the standards whose matchers cover the file.
