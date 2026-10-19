@@ -19,4 +19,5 @@ export interface Quote {
   status: QuoteStatus
   createdAt: Date
   report?: QuoteReport
+  reportClearedAt?: Date
 }

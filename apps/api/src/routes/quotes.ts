@@ -1,5 +1,5 @@
 import { Router, type Response } from 'express'
-import { ObjectId, type UpdateFilter } from 'mongodb'
+import { ObjectId } from 'mongodb'
 import { getDb } from '../db.js'
 import { problem } from '../problem.js'
 import type { Quote, QuoteStatus } from '../types.js'
@@ -62,8 +62,22 @@ quotesRouter.get('/pending', async (_req, res) => {
 
 const ID_PATTERN = /^[0-9a-f]{24}$/i
 
+// Approving a reported quote clears the report and makes the quote immune to
+// further reports (ADR-003). The pipeline does it in one write, and only when
+// a report is present: a plain approval sets no reportClearedAt.
+const APPROVE_PIPELINE = [
+  {
+    $set: {
+      status: 'approved',
+      reportClearedAt: {
+        $cond: [{ $ifNull: ['$report', false] }, '$$NOW', '$reportClearedAt'],
+      },
+    },
+  },
+  { $unset: 'report' },
+]
+
 // A moderation action is only valid on a pending quote.
-// Approving also clears a report: the moderator has reviewed it.
 async function moderate(id: string, status: QuoteStatus, res: Response) {
   if (!ID_PATTERN.test(id)) {
     problem(res, 'invalid-quote-id', 'Quote id must be a 24-character hex string')
@@ -72,8 +86,7 @@ async function moderate(id: string, status: QuoteStatus, res: Response) {
   const _id = new ObjectId(id)
   const quotes = getDb().collection<Quote>('quotes')
 
-  const update: UpdateFilter<Quote> =
-    status === 'approved' ? { $set: { status }, $unset: { report: '' } } : { $set: { status } }
+  const update = status === 'approved' ? APPROVE_PIPELINE : { $set: { status } }
   const { matchedCount } = await quotes.updateOne({ _id, status: 'pending' }, update)
   if (matchedCount === 1) {
     res.json({ id, status })
@@ -92,8 +105,8 @@ quotesRouter.patch('/:id/approve', (req, res) => moderate(req.params.id, 'approv
 
 quotesRouter.patch('/:id/reject', (req, res) => moderate(req.params.id, 'rejected', res))
 
-// A report sends an approved quote back to moderation. The status check and
-// the write are one conditional update, so concurrent calls can't both win.
+// A report sends an approved, never-cleared quote back to moderation. The checks
+// and the write are one conditional update, so concurrent calls can't both win.
 quotesRouter.post('/:id/report', async (req, res) => {
   const { id } = req.params
   if (!ID_PATTERN.test(id)) {
@@ -109,7 +122,7 @@ quotesRouter.post('/:id/report', async (req, res) => {
   const quotes = getDb().collection<Quote>('quotes')
 
   const { matchedCount } = await quotes.updateOne(
-    { _id, status: 'approved' },
+    { _id, status: 'approved', reportClearedAt: { $exists: false } },
     { $set: { status: 'pending', report: { reason: result.value, reportedAt: new Date() } } },
   )
   if (matchedCount === 1) {
@@ -120,6 +133,14 @@ quotesRouter.post('/:id/report', async (req, res) => {
   const existing = await quotes.findOne({ _id })
   if (!existing) {
     problem(res, 'quote-not-found', `No quote with id ${id}`)
+    return
+  }
+  if (existing.reportClearedAt) {
+    problem(
+      res,
+      'quote-not-reportable',
+      'Quote was already reviewed by a moderator after a report and stays published',
+    )
     return
   }
   // The quote can be approved again by the time it is read back (a moderator won the race).
