@@ -13,9 +13,7 @@ export function shuffle<T>(items: T[], random: () => number = Math.random): T[] 
   return copy
 }
 
-// Moves to the next item of the cycle.
-// - No repeat until every item was shown, then everything is reshuffled.
-// - The first item of a new cycle differs from the last one of the previous cycle.
+// Moves to a quote of the list.
 export function nextInCycle<T extends { id: string }>(
   all: T[],
   state: CycleState<T>,
@@ -25,14 +23,6 @@ export function nextInCycle<T extends { id: string }>(
     return { current: null, remaining: [] }
   }
 
-  let queue = state.remaining
-  if (queue.length === 0) {
-    queue = shuffle(all, random)
-    if (queue.length > 1 && queue[0].id === state.current?.id) {
-      ;[queue[0], queue[1]] = [queue[1], queue[0]]
-    }
-  }
-
-  const [current, ...remaining] = queue
-  return { current, remaining }
+  const current = all[Math.floor(random() * all.length)]
+  return { current, remaining: state.remaining }
 }

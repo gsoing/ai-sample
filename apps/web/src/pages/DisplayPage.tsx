@@ -36,7 +36,7 @@ export default function DisplayPage() {
 
   return (
     <section className="quote-card">
-      <blockquote>{current.text}</blockquote>
+      <blockquote dangerouslySetInnerHTML={{ __html: current.text }} />
       <p className="quote-author">{current.author}</p>
       {current.context && <p className="quote-context">{current.context}</p>}
       <button type="button" onClick={() => setCycle(nextInCycle(quotes, cycle))}>
