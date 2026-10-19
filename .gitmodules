@@ -1,0 +1,6 @@
+[submodule ".claude/aisdlc-framework"]
+	path = .claude/aisdlc-framework
+	url = https://github.com/kering-technologies/dso-digital_factory-ai_sdlc.git
+[submodule ".claude/dso"]
+	path = .claude/dso
+	url = https://github.com/kering-technologies/dso-digital_factory-guidelines.git

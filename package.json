@@ -16,7 +16,7 @@
     "db:up": "docker compose up -d --wait mongo",
     "db:down": "docker compose down",
     "db:seed": "pnpm --filter api seed",
-    "setup:aisdlc": "for s in standards-check standards-impact standards-coherence; do (cd .claude/aisdlc-framework/plugins/governance-impl/skills/$s && npm ci --omit=dev --silent --no-audit --no-fund); done",
+    "setup:aisdlc": "for s in standards-check standards-impact standards-coherence; do (cd .claude/aisdlc-framework/plugins/governance-impl/skills/$s && npm install --omit=dev --no-package-lock --no-audit --no-fund --loglevel=error); done",
     "standards:prepare": "node .claude/aisdlc-framework/plugins/governance-impl/skills/standards-check/scripts/prepare.mjs --diff-base ${DIFF_BASE:-HEAD~1} --out work/standards-check.json",
     "standards:impact": "node .claude/aisdlc-framework/plugins/governance-impl/skills/standards-impact/scripts/prepare.mjs --diff-base ${DIFF_BASE:-HEAD~1} --out work/standards-impact.json",
     "standards:coherence": "node .claude/aisdlc-framework/plugins/governance-impl/skills/standards-coherence/scripts/prepare.mjs --out work/standards-coherence.json",
