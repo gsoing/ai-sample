@@ -37,6 +37,7 @@ export default function DisplayPage() {
   function closeReport() {
     setReporting(false)
     setReason(null)
+    setReportError('')
   }
 
   function showNext() {
@@ -93,7 +94,7 @@ export default function DisplayPage() {
           <p className="quote-author">{current.author}</p>
           {current.context && <p className="quote-context">{current.context}</p>}
           <div className="quote-actions">
-            <button type="button" onClick={showNext}>
+            <button type="button" disabled={sending} onClick={showNext}>
               Next quote
             </button>
             {!reporting && (
@@ -134,7 +135,7 @@ export default function DisplayPage() {
                 >
                   Confirm
                 </button>
-                <button type="button" className="secondary" onClick={closeReport}>
+                <button type="button" className="secondary" disabled={sending} onClick={closeReport}>
                   Cancel
                 </button>
               </div>
