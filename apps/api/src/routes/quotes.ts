@@ -122,9 +122,10 @@ quotesRouter.post('/:id/report', async (req, res) => {
     problem(res, 'quote-not-found', `No quote with id ${id}`)
     return
   }
-  problem(
-    res,
-    'quote-not-reportable',
-    `Quote is ${existing.status}, only approved quotes can be reported`,
-  )
+  // The quote can be approved again by the time it is read back (a moderator won the race).
+  const detail =
+    existing.status === 'approved'
+      ? 'Quote changed while it was being reported, try again'
+      : `Quote is ${existing.status}, only approved quotes can be reported`
+  problem(res, 'quote-not-reportable', detail)
 })

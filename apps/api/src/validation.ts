@@ -55,13 +55,14 @@ export type ReportValidationResult =
 
 // The reason is compared as is: no trimming or case folding.
 export function validateReport(body: unknown): ReportValidationResult {
+  const error = `reason must be one of ${REPORT_REASONS.join(', ')}`
   if (typeof body !== 'object' || body === null) {
-    return { ok: false, error: 'Request body must be a JSON object' }
+    return { ok: false, error }
   }
   const { reason } = body as Record<string, unknown>
 
   if (!REPORT_REASONS.includes(reason as ReportReason)) {
-    return { ok: false, error: `reason must be one of ${REPORT_REASONS.join(', ')}` }
+    return { ok: false, error }
   }
 
   return { ok: true, value: reason as ReportReason }
