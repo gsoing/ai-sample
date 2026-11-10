@@ -8,7 +8,7 @@ This repository is the starter project for the agentic development training. You
 
 - **Frontend**: Vite + React 19 + TypeScript (`apps/web`)
 - **Backend**: Express 5 + TypeScript (`apps/api`)
-- **Storage**: MongoDB 8 through the official `mongodb` driver, run with Docker Compose
+- **Storage**: SQLite through Node's built-in `node:sqlite` module (a single file, no server, no Docker)
 - **Tooling**: pnpm workspace, oxlint for the web app
 
 There is no ORM, validation library, UI library or test runner. `react-router` is the only dependency that may be added.
@@ -23,12 +23,10 @@ There is no ORM, validation library, UI library or test runner. `react-router` i
 
 ## Getting started
 
-Requirements: Node.js 22+, pnpm 10.5.2, Docker.
+Requirements: Node.js 22.13+, pnpm 10.5.2.
 
 ```bash
 pnpm install
-cp .env.example .env
-pnpm db:up        # start MongoDB and wait for its healthcheck
 pnpm dev          # web on http://localhost:5173, API on http://localhost:3000
 ```
 
@@ -39,7 +37,7 @@ curl http://localhost:3000/api/health
 # {"status":"ok","db":true}
 ```
 
-Stop the database with `pnpm db:down`. Add `-v` to wipe its data.
+The database is the file `apps/api/data/app.db`, created on first start. Wipe it with `pnpm db:reset` (API stopped).
 
 ## Scripts
 
@@ -52,7 +50,7 @@ Run from the repository root:
 | `pnpm lint` | Lints the web app (oxlint) |
 | `pnpm typecheck` | Type-checks the API |
 | `pnpm build` | Builds both apps |
-| `pnpm db:up` / `pnpm db:down` | Starts or stops MongoDB |
+| `pnpm db:reset` | Deletes the SQLite database file |
 
 ## Repository layout
 
@@ -60,7 +58,6 @@ Run from the repository root:
 apps/
   web/    Vite + React frontend (entry: src/main.tsx)
   api/    Express API (entry: src/index.ts, routes under /api)
-compose.yaml   MongoDB service
 AGENTS.md      Instructions for AI coding agents
 ```
 
@@ -68,4 +65,4 @@ The Vite dev server proxies `/api` to `http://localhost:3000`, so the frontend c
 
 ## Working with AI agents
 
-[`AGENTS.md`](./AGENTS.md) holds the project rules that agents must follow: pnpm only, the fixed architecture, and the gotchas (NodeNext `.js` imports, MongoDB auth, and so on). Keep it up to date when the project changes.
+[`AGENTS.md`](./AGENTS.md) holds the project rules that agents must follow: pnpm only, the fixed architecture, and the gotchas (NodeNext `.js` imports, the SQLite file location, and so on). Keep it up to date when the project changes.

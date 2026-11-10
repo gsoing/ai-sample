@@ -2,6 +2,10 @@ node_modules
 dist
 .env
 .env.*
-!.env.example
 *.log
 .DS_Store
+apps/api/data
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
